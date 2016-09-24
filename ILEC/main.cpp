@@ -18,6 +18,9 @@ std::string("IMPTFUNC 0 INPUT\n") +
 std::string("IMPTFUNC 1 OUTPUT\n") +
 std::string("STACKSIZE 1024\n") +
 std::string("ENTERANCE\n") +
+std::string("CALL 2 0 40\n") +
+std::string("RETURN\n") +
+std::string("DCELFUNC 2") +
 std::string("CALL 0 0 40\n") +
 std::string("CALL 1 0 40\n") +
 std::string("RETURN\n") +
@@ -81,8 +84,13 @@ public:
             switch (static_cast<commands>(*iter))
             {
                 case commands::CALL:
-                    funcs[*(++iter)](base + *(++iter), base + *(++iter));
+                {
+                    auto a = ++iter;
+                    auto b = ++iter;
+                    auto c = ++iter;
+                    funcs[*a](base + *b, base + *c);
                     break;
+                }
                 case commands::RETURN:
                     return;
                 default:
@@ -106,6 +114,16 @@ void anal(std::stringstream& stream)
             if (funcs.size() <= id)
                 funcs.resize(id + 1);
             funcs[id] = getfunction(name);
+        }
+        if (command == "DCELFUNC")
+        {
+            int id;
+            stream >> id;
+            if (funcs.size() <= id)
+                funcs.resize(id + 1);
+            func f;
+            f.anal(stream);
+            funcs[id] = f;
         }
         if (command == "ENTERANCE")
         {
