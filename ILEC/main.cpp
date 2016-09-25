@@ -16,19 +16,12 @@
 #include <functional>
 
 const std::string testprog =
-std::string("CONSTANRTS 7 48656C6C6F0A00\n") +
-std::string("IMPTFUNC 0 INPUT\n") +
-std::string("IMPTFUNC 1 OUTPUT\n") +
+std::string("CONSTANRTS 14 48656C6C6F20576F726C64210A00\n") +
+std::string("IMPTFUNC 0 OUTPUT\n") +
 std::string("STACKSIZE 1024\n") +
 std::string("ENTERANCE\n") +
-std::string("SETMEM 0 7 0\n") +
-std::string("CALL 1 0 0\n") +
-std::string("JUMP -1\n") +
-std::string("CALL 2 0 0\n") +
-std::string("RETURN\n") +
-std::string("DCELFUNC 2") +
+std::string("SETMEM 0 14 0\n") +
 std::string("CALL 0 0 0\n") +
-std::string("CALL 1 0 0\n") +
 std::string("RETURN\n") +
 std::string("END\n");
 
@@ -67,15 +60,12 @@ inline uint readbits(char c)
 
 enum class commands : size_t
 {
-    IMPTFUNC,
-    DCELFUNC,
-    ENTRANCE,
-    STACKSIZE,
-    SETMEM,
-    CALL,
-    IF,
-    JUMP,
-    RETURN,
+    IMPTFUNC, DCELFUNC, ENTRANCE, STACKSIZE,
+    SETMEM, IF, JUMP, CALL, RETURN,
+    ADDi8, ADDi16, ADDi32, ADDi64, ADDu8, ADDu16, ADDu32, ADDu64,
+    MINi8, MINi16, MINi32, MINi64, MINu8, MINu16, MINu32, MINu64,
+    MULi8, MULi16, MULi32, MULi64, MULu8, MULu16, MULu32, MULu64,
+    DIVi8, DIVi16, DIVi32, DIVi64, DIVu8, DIVu16, DIVu32, DIVu64,
 };
 
 std::function<void(char*, char*)> getfunction(const std::string& name)
@@ -85,6 +75,21 @@ std::function<void(char*, char*)> getfunction(const std::string& name)
     if (name == "OUTPUT")
         return [](char* base, char*) { std::cout << static_cast<char*>(base); };
     return nullptr;
+}
+
+inline void arithmetic(commands kind, void* p1, void* p2, void* res)
+{
+    switch (kind)
+    {
+        case ADDi8:
+            break;
+        case ADDi16: ADDi32, ADDi64, ADDu8, ADDu16, ADDu32, ADDu64,
+            MINi8, MINi16, MINi32, MINi64, MINu8, MINu16, MINu32, MINu64,
+            MULi8, MULi16, MULi32, MULi64, MULu8, MULu16, MULu32, MULu64,
+            DIVi8, DIVi16, DIVi32, DIVi64, DIVu8, DIVu16, DIVu32, DIVu64,
+        default:
+            break;
+    }
 }
 
 void readconst(std::stringstream& stream)
@@ -132,7 +137,9 @@ public:
             }
             if (command == "IF")
             {
-                
+                uint64_t judge, offtrue, offfalse;
+                stream >> judge >> offtrue >> offfalse;
+                bytes.push_back({static_cast<uint64_t>(commands::IF), judge, offtrue, offfalse});
             }
             if (command == "RETURN")
             {
@@ -157,6 +164,9 @@ public:
                     break;
                 case commands::JUMP:
                     iter += (reinterpret_cast<const int64_t*>(cmd.data())[1]);
+                    continue;
+                case commands::IF:
+                    iter += cmd[1] ? cmd[2] : cmd[3];
                     continue;
                 case commands::RETURN:
                     return;
