@@ -5,23 +5,15 @@
 //  Created by User on 16/9/24.
 //  Copyright © 2016年 Infinideastudio. All rights reserved.
 //
-
-#include <iostream>
-#include <vector>
-#include <array>
-#include <cstdio>
-#include <string>
-#include <sstream>
-#include <cstring>
-#include <functional>
-
+#include "func.h"
 const std::string testprog =
-std::string("CONSTANRTS 14 48656C6C6F20576F726C64210A00\n") +
+std::string("CONSTANRTS 14 48656C6C6F20576F726C64210000\n") +
 std::string("IMPTFUNC 0 OUTPUT\n") +
 std::string("STACKSIZE 1024\n") +
 std::string("ENTERANCE\n") +
 std::string("SETMEM 0 14 0\n") +
 std::string("CALL 0 0 0\n") +
+std::string("JUMP -1\n") +
 std::string("RETURN\n") +
 std::string("END\n");
 
@@ -30,7 +22,7 @@ std::unique_ptr<unsigned char[]> consts;
 std::vector<std::function<void(char*, char*)>> funcs;
 std::function<void(char*, char*)> mainf;
 
-inline uint readbits(char c)
+inline uint8_t readbits(char c)
 {
     switch (c)
     {
@@ -58,15 +50,6 @@ inline uint readbits(char c)
     return 0;
 }
 
-enum class commands : size_t
-{
-    IMPTFUNC, DCELFUNC, ENTRANCE, STACKSIZE,
-    SETMEM, IF, JUMP, CALL, RETURN,
-    ADDi8, ADDi16, ADDi32, ADDi64, ADDu8, ADDu16, ADDu32, ADDu64,
-    MINi8, MINi16, MINi32, MINi64, MINu8, MINu16, MINu32, MINu64,
-    MULi8, MULi16, MULi32, MULi64, MULu8, MULu16, MULu32, MULu64,
-    DIVi8, DIVi16, DIVi32, DIVi64, DIVu8, DIVu16, DIVu32, DIVu64,
-};
 
 std::function<void(char*, char*)> getfunction(const std::string& name)
 {
@@ -75,21 +58,6 @@ std::function<void(char*, char*)> getfunction(const std::string& name)
     if (name == "OUTPUT")
         return [](char* base, char*) { std::cout << static_cast<char*>(base); };
     return nullptr;
-}
-
-inline void arithmetic(commands kind, void* p1, void* p2, void* res)
-{
-    switch (kind)
-    {
-        case ADDi8:
-            break;
-        case ADDi16: ADDi32, ADDi64, ADDu8, ADDu16, ADDu32, ADDu64,
-            MINi8, MINi16, MINi32, MINi64, MINu8, MINu16, MINu32, MINu64,
-            MULi8, MULi16, MULi32, MULi64, MULu8, MULu16, MULu32, MULu64,
-            DIVi8, DIVi16, DIVi32, DIVi64, DIVu8, DIVu16, DIVu32, DIVu64,
-        default:
-            break;
-    }
 }
 
 void readconst(std::stringstream& stream)
@@ -104,79 +72,6 @@ void readconst(std::stringstream& stream)
     for (auto iter = begin; iter < end; ++iter)
         *(i++) = readbits(*iter) * 16 + readbits(*(++iter));
 }
-
-class func
-{
-public:
-    using com = std::array<uint64_t, 4>;
-    std::vector<com> bytes;
-    void anal(std::stringstream& stream)
-    {
-        std::string command;
-        do
-        {
-            stream >> command;
-            if (command == "CALL")
-            {
-                uint64_t func, base, _this;
-                stream >> func >> base >> _this;
-                bytes.push_back({static_cast<uint64_t>(commands::CALL), func, base, _this});
-            }
-            if (command == "SETMEM")
-            {
-                uint64_t base, count, offset;
-                stream >> base >> count >> offset;
-                bytes.push_back({static_cast<uint64_t>(commands::SETMEM), base, count, offset});
-            }
-            if (command == "JUMP")
-            {
-                int64_t offset;
-                stream >> offset;
-                bytes.push_back({static_cast<uint64_t>(commands::JUMP),
-                    *reinterpret_cast<uint64_t*>(&offset), 0, 0});
-            }
-            if (command == "IF")
-            {
-                uint64_t judge, offtrue, offfalse;
-                stream >> judge >> offtrue >> offfalse;
-                bytes.push_back({static_cast<uint64_t>(commands::IF), judge, offtrue, offfalse});
-            }
-            if (command == "RETURN")
-            {
-                bytes.push_back({static_cast<uint64_t>(commands::RETURN), 0, 0, 0});
-            }
-        }while (command != "RETURN");
-    }
-    void operator ()(char* base, char* _this)
-    {
-        auto begin = bytes.cbegin();
-        auto end = bytes.cend();
-        for (auto iter = begin; iter < end;)
-        {
-            const com& cmd = *iter;
-            switch (static_cast<commands>(cmd[0]))
-            {
-                case commands::CALL:
-                    funcs[cmd[1]](base + cmd[2], base + cmd[3]);
-                    break;
-                case commands::SETMEM:
-                    memcpy(base + cmd[1], consts.get() + cmd[3], cmd[2]);
-                    break;
-                case commands::JUMP:
-                    iter += (reinterpret_cast<const int64_t*>(cmd.data())[1]);
-                    continue;
-                case commands::IF:
-                    iter += cmd[1] ? cmd[2] : cmd[3];
-                    continue;
-                case commands::RETURN:
-                    return;
-                default:
-                    break;
-            }
-            ++iter;
-        }
-    }
-};
 
 void anal(std::stringstream& stream)
 {
@@ -228,5 +123,6 @@ int main(int argc, const char * argv[])
     stream << testprog;
     anal(stream);
     mainf(stack.get(), stack.get());
+    system("pause");
     return 0;
 }
