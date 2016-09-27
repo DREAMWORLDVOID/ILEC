@@ -35,18 +35,18 @@ enum class commands : size_t
     MINi8, MINi16, MINi32, MINi64, MINu8, MINu16, MINu32, MINu64, MINf32, MINf64,
     MULi8, MULi16, MULi32, MULi64, MULu8, MULu16, MULu32, MULu64, MULf32, MULf64,
     DIVi8, DIVi16, DIVi32, DIVi64, DIVu8, DIVu16, DIVu32, DIVu64, DIVf32, DIVf64,
-    MODi8, MODi16, MODi32, MODi64, MODu8, MODu16, MODu32, MODu64, MODf32, MODf64,
+    MODi8, MODi16, MODi32, MODi64, MODu8, MODu16, MODu32, MODu64,
     ADDSi8, ADDSi16, ADDSi32, ADDSi64, ADDSu8, ADDSu16, ADDSu32, ADDSu64, ADDSf32, ADDSf64,
     MINSi8, MINSi16, MINSi32, MINSi64, MINSu8, MINSu16, MINSu32, MINSu64, MINSf32, MINSf64,
     MULSi8, MULSi16, MULSi32, MULSi64, MULSu8, MULSu16, MULSu32, MULSu64, MULSf32, MULSf64,
     DIVSi8, DIVSi16, DIVSi32, DIVSi64, DIVSu8, DIVSu16, DIVSu32, DIVSu64, DIVSf32, DIVSf64,
-    MODSi8, MODSi16, MODSi32, MODSi64, MODSu8, MODSu16, MODSu32, MODSu64, MODSf32, MODSf64
+    MODSi8, MODSi16, MODSi32, MODSi64, MODSu8, MODSu16, MODSu32, MODSu64,
 };
 class func
 {
 public:
     using com = std::array<uint64_t, 4>;
     std::vector<com> bytes;
-    void anal(std::stringstream& stream);
+    void anal(std::istream& stream);
     void operator ()(char* base, char* _this);
 };

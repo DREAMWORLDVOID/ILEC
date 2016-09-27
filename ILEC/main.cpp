@@ -6,16 +6,7 @@
 //  Copyright © 2016年 Infinideastudio. All rights reserved.
 //
 #include "func.h"
-const std::string testprog =
-std::string("CONSTANRTS 14 48656C6C6F20576F726C64210000\n") +
-std::string("IMPTFUNC 0 OUTPUT\n") +
-std::string("STACKSIZE 1024\n") +
-std::string("ENTERANCE\n") +
-std::string("SETMEM 0 14 0\n") +
-std::string("CALL 0 0 0\n") +
-std::string("JUMP -1\n") +
-std::string("RETURN\n") +
-std::string("END\n");
+#include <fstream>
 
 std::unique_ptr<char[]> stack;
 std::unique_ptr<unsigned char[]> consts;
@@ -60,7 +51,7 @@ std::function<void(char*, char*)> getfunction(const std::string& name)
     return nullptr;
 }
 
-void readconst(std::stringstream& stream)
+void readconst(std::istream& stream)
 {
     std::string read;
     size_t length;
@@ -73,7 +64,7 @@ void readconst(std::stringstream& stream)
         *(i++) = readbits(*iter) * 16 + readbits(*(++iter));
 }
 
-void anal(std::stringstream& stream)
+void anal(std::istream& stream)
 {
     std::string command;
     do
@@ -119,10 +110,20 @@ void anal(std::stringstream& stream)
 
 int main(int argc, const char * argv[])
 {
-    std::stringstream stream;
-    stream << testprog;
-    anal(stream);
-    mainf(stack.get(), stack.get());
+    std::ifstream file;
+    std::string path;
+    std::cin >> path;
+    file.open(path);
+    if (file.good())
+    {
+        anal(file);
+        mainf(stack.get(), stack.get());
+        std::cout << std::endl << "Exectuion completed" << std::endl;
+    }
+    else
+    {
+        std::cout << "Illegal Path!" << std::endl;
+    }
     system("pause");
     return 0;
 }
