@@ -142,10 +142,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ILEC\assembler.cpp" />
     <ClCompile Include="ILEC\func.cpp" />
     <ClCompile Include="ILEC\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ILEC\assembler.h" />
     <ClInclude Include="ILEC\func.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

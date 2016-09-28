@@ -49,4 +49,16 @@ public:
     std::vector<com> bytes;
     void anal(std::istream& stream);
     void operator ()(char* base, char* _this);
+private:
+    bool rb[32];
+    uint8_t ru8[32];
+    uint16_t ru16[32];
+    uint32_t ru32[32];
+    uint64_t ru64[32];
+    int8_t rs8[32];
+    int16_t rs16[32];
+    int32_t rs32[32];
+    int64_t rs64[32];
+    float rf32[32];
+    double rf64[32];
 };
