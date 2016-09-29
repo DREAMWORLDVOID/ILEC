@@ -11,22 +11,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ILEC\main.cpp">
+    <ClCompile Include="regexanal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ILEC\func.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ILEC\assembler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ILEC\func.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ILEC\assembler.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
