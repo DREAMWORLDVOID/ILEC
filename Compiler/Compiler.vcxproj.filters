@@ -14,5 +14,8 @@
     <ClCompile Include="regexanal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="parser1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
