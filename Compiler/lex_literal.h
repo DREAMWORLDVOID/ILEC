@@ -19,7 +19,9 @@ namespace lexical
     {
         inline static pchar w(pchar ch)
         {
-            ch = invoke<f>(ch); if (ch) ch = seq<l - 1, s...>::w(ch);
+            ch = invoke<f>(ch);
+            if (ch)
+                ch = seq<l - 1, s...>::w(ch);
             return ch;
         }
     };
@@ -57,7 +59,7 @@ namespace lexical
         inline static pchar w(pchar ch)
         {
             pchar c = invoke<f>(ch);
-            return c ? c : invoke<_or<l - 1, fs...>::w>(ch);
+            return max(c, invoke<_or<l - 1, fs...>::w>(ch));
         }
     };
     
@@ -77,8 +79,20 @@ namespace lexical
         {
             size_t c = 0;
             pchar c2;
-            for (; c < l; ++c) { ch = invoke<f>(ch); if (!ch) return nullptr; }
-            for (; c < m; ++c) { c2 = invoke<f>(ch); if (!c2) break; else ch = c2; }
+            for (; c < l; ++c)
+            {
+                ch = invoke<f>(ch);
+                if (!ch)
+                    return nullptr;
+            }
+            for (; c < m; ++c)
+            {
+                c2 = invoke<f>(ch);
+                if (!c2)
+                    break;
+                else
+                    ch = c2;
+            }
             return ch;
         }
     };
@@ -126,9 +140,12 @@ namespace lexical
     using oct = _in<'0', '7'>;
     using hex = _or<3, _in<'0', '9'>::w, _in<'a', 'f'>::w, _in<'A', 'F'>::w>;
     using sign = _or<2, _is<'+'>::w, _is<'-'>::w>;
-    using universal_character_name = seq<3, _is<'\\'>::w,
-    _or<2, seq<2, _is<'u'>::w, tim<4, hex::w>::w>::w,
-    seq<2, _is<'U'>::w, tim<8, hex::w>::w>::w>::w>;
+    using universal_character_name =
+    seq<2, _is<'\\'>::w,
+    _or<2,
+    seq<2, _is<'u'>::w, tim<4, hex::w>::w>::w,
+    seq<2, _is<'U'>::w, tim<8, hex::w>::w>::w>
+    ::w>;
     
     namespace preprocessing_token
     {
@@ -165,7 +182,8 @@ namespace lexical
     using digit_sequence = orm<dec::w>;
     using fractional_constant =
     _or<2, seq<2, digit_sequence::w, _is<'.'>::w>::w,
-    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;    using exponent =
+    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;
+    using exponent =
     seq<3, _or<2, _is<'E'>::w, _is<'e'>::w>::w, opt<sign::w>::w, digit_sequence::w>;
     using floating_suffix =
     _or<4, _is<'f'>::w, _is<'F'>::w,_is<'l'>::w, _is<'L'>::w>;

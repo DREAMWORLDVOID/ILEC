@@ -116,9 +116,9 @@ namespace lexical {
         return -1; // Error: Not Found
     }
     
-    int index_keyword_check_ambiguity(string keyword_part){
+    /*int index_keyword_check_ambiguity(string keyword_part){
         
-    }
+    }*/
     
     int current_parser = -1;
     
