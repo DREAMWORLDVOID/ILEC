@@ -24,7 +24,10 @@ namespace IO{
         string contents(buffer.str());
         if (contents.compare("") == 0)
             return {(char)error::bad_io};
-        return buffer.str();
+        for (int i = 0; i < contents.length(); ++i){
+            contents[i] = tolower(contents[i]);
+        }
+        return contents;
     }
 }
 
