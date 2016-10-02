@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22DB03FC1DA0E40600D417A9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22DB03FB1DA0E40600D417A9 /* main.cpp */; };
-		22DB04041DA0E43000D417A9 /* parser1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22DB04021DA0E43000D417A9 /* parser1.cpp */; };
-		22DB04051DA0E43000D417A9 /* regexanal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22DB04031DA0E43000D417A9 /* regexanal.cpp */; };
+		22DB04041DA0E43000D417A9 /* lex_literal.h in Sources */ = {isa = PBXBuildFile; fileRef = 22DB04021DA0E43000D417A9 /* lex_literal.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,8 +26,7 @@
 /* Begin PBXFileReference section */
 		22DB03F81DA0E40600D417A9 /* Compiler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Compiler; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DB03FB1DA0E40600D417A9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		22DB04021DA0E43000D417A9 /* parser1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser1.cpp; sourceTree = "<group>"; };
-		22DB04031DA0E43000D417A9 /* regexanal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = regexanal.cpp; sourceTree = "<group>"; };
+		22DB04021DA0E43000D417A9 /* lex_literal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lex_literal.h; sourceTree = "<group>"; };
 		22DB04061DA0E5BB00D417A9 /* lexical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lexical.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,8 +60,7 @@
 		22DB03FA1DA0E40600D417A9 /* Compiler */ = {
 			isa = PBXGroup;
 			children = (
-				22DB04021DA0E43000D417A9 /* parser1.cpp */,
-				22DB04031DA0E43000D417A9 /* regexanal.cpp */,
+				22DB04021DA0E43000D417A9 /* lex_literal.h */,
 				22DB03FB1DA0E40600D417A9 /* main.cpp */,
 				22DB04061DA0E5BB00D417A9 /* lexical.h */,
 			);
@@ -127,8 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DB04041DA0E43000D417A9 /* parser1.cpp in Sources */,
-				22DB04051DA0E43000D417A9 /* regexanal.cpp in Sources */,
+				22DB04041DA0E43000D417A9 /* lex_literal.h in Sources */,
 				22DB03FC1DA0E40600D417A9 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,7 +137,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -165,7 +161,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -176,7 +172,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -188,7 +184,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -211,13 +207,14 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -233,6 +230,7 @@
 		22DB04011DA0E40600D417A9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = fast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -256,6 +254,7 @@
 				22DB04011DA0E40600D417A9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

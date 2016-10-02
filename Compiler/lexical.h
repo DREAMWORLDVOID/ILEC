@@ -11,8 +11,10 @@
 
 using namespace std;
 
-namespace lexical{
-    const string reserved_keyword[] = {
+namespace lexical
+{
+    const string reserved_keyword[] =
+    {
         "alignas",
         "continue",
         "friend",
