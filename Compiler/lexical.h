@@ -108,11 +108,11 @@ namespace lexical {
     
     int index_keyword(char* keyword){
         for (int i=0; i < len_reserved_keyword; ++i)
-            if (keyword == reserved_keyword[i])
+            if (strcmp(reserved_keyword[i].c_str(),keyword) == 0)
                 return i;
         
         for (int i=0; i < len_preprocessing_op_or_punc; ++i)
-            if (keyword == preprocessing_op_or_punc[i])
+            if (strcmp(preprocessing_op_or_punc[i].c_str(),keyword) == 0)
                 return i + len_reserved_keyword;
         
         return error::not_found; // Error: Not Found
