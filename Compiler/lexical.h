@@ -12,6 +12,7 @@
 using namespace std;
 
 namespace lexical {
+    
     const string reserved_keyword[] = {
         "alignas",
         "continue",
@@ -85,12 +86,21 @@ namespace lexical {
         "const_cast",
         "for",
         "public",
-        "throw"
+        "throw",
+        "override",
+        "final" // override and final are not keywords, but reserved in this case for simplificiation
     };
     const int len_reserved_keyword = sizeof(reserved_keyword) / sizeof(reserved_keyword[0]);
     const string symbol[] = {
-        "1",
-        "2"
+        "{","}","[","]","#","##","(",")",
+        "<:",":>","<%","%>","%:","%:%:",";",":","...",
+        "new","delete","?","::",".",".*",
+        "+","-","*","/","%","ˆ","&","|","~",
+        "!","=","<",">","+=","-=","*=","/=","%=",
+        "ˆ=","&=","|=","<<",">>",">>=","<<=","==","!="
+        "<=",">=","&&","||","++","--",",","->*","->"
+        "and","and_eq","bitand","bitor","compl","not","not_eq"
+        "or","or_eq","xor","xor_eq"
     };
     const int len_symbol = sizeof(symbol) / sizeof(symbol[0]);
     
@@ -106,7 +116,13 @@ namespace lexical {
         return -1; // Error: Not Found
     }
     
+    int index_keyword_check_ambiguity(string keyword_part){
+        
+    }
+    
     int current_parser = -1;
+    
+    
 }
 
 
