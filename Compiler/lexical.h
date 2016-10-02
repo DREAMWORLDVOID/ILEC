@@ -119,7 +119,20 @@ namespace lexical {
     }
     
     int index_keyword_check_ambiguity(char* keyword_part){
-        return error::not_found;
+        int first_result = error::not_found;
+        for (int i=0; i < len_reserved_keyword; ++i){
+            if (strlen(keyword_part) > reserved_keyword[i].length())
+                continue;
+            if (strcmp(keyword_part, reserved_keyword[i].substr(0,strlen(keyword_part)).c_str())){
+                if (first_result == error::not_found){
+                    first_result = i;
+                }
+                else{
+                    return error::ambiguity;
+                }
+            }
+        }
+        return first_result;
     }
     
     int current_parser = -1;
