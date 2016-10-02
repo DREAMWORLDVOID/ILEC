@@ -89,6 +89,20 @@ namespace lexical
         "public",
         "throw"
     };
+    
+    const string preprocessing_op_or_punc[] =
+    {
+        "{", "}", "[", "]", "#", "##", "(", ")", "%:", "%:%:", ";", ":", "...",
+        "<:", ":>", "<%", "%>",
+        "new", "delete", "?", "::", ".", ".*",
+        "+", "-", "*", "/", "%", "ˆ", "&", "|", "~",
+        "!", "=", "<", ">", "+=", "-=", "*=", "/=", "%=",
+        "ˆ=", "&=", "|=", "<<", ">>", ">>=", "<<=", "==", "!=",
+        "<=", ">=", "&&", "||", "++", "--", ",", "->*", "->",
+        "and", "and_eq", "bitand", "bitor", "compl", "not", "not_eq",
+        "or", "or_eq", "xor", "xor_eq"
+    };
+    
     const int len_reserved_keyword = sizeof(reserved_keyword) /sizeof(reserved_keyword[0]);
     const string symbol[] = {"1","2"};
     

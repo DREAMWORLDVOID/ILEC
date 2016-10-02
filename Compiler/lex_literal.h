@@ -1,3 +1,11 @@
+//
+//  lex_literal.h
+//  Compiler
+//
+//  Created by Yshliu on 2016/9/30.
+//  Copyright © 2016年 Infinideastudio. All rights reserved.
+//
+
 #ifndef lex_literal_h
 #define lex_literal_h
 
@@ -165,7 +173,8 @@ namespace lexical
     using digit_sequence = orm<dec::w>;
     using fractional_constant =
     _or<2, seq<2, digit_sequence::w, _is<'.'>::w>::w,
-    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;    using exponent =
+    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;
+    using exponent =
     seq<3, _or<2, _is<'E'>::w, _is<'e'>::w>::w, opt<sign::w>::w, digit_sequence::w>;
     using floating_suffix =
     _or<4, _is<'f'>::w, _is<'F'>::w,_is<'l'>::w, _is<'L'>::w>;
