@@ -9,6 +9,8 @@
 #ifndef lexical_h
 #define lexical_h
 
+#include "error.h"
+
 using namespace std;
 
 namespace lexical {
@@ -104,21 +106,47 @@ namespace lexical {
     };
     const int len_preprocessing_op_or_punc = sizeof(preprocessing_op_or_punc) / sizeof(preprocessing_op_or_punc[0]);
     
-    int index_keyword(string keyword){
+    int index_keyword(char* keyword){
         for (int i=0; i < len_reserved_keyword; ++i)
-            if (keyword == reserved_keyword[i])
+            if (strcmp(reserved_keyword[i].c_str(),keyword) == 0)
                 return i;
         
         for (int i=0; i < len_preprocessing_op_or_punc; ++i)
-            if (keyword == preprocessing_op_or_punc[i])
+            if (strcmp(preprocessing_op_or_punc[i].c_str(),keyword) == 0)
                 return i + len_reserved_keyword;
         
-        return -1; // Error: Not Found
+        return error::not_found; // Error: Not Found
     }
     
-    /*int index_keyword_check_ambiguity(string keyword_part){
-        
-    }*/
+    int index_keyword_check_ambiguity(char* keyword_part){
+        int first_result = error::not_found;
+        for (int i=0; i < len_reserved_keyword; ++i){
+            if (strlen(keyword_part) > reserved_keyword[i].length())
+                continue;
+            if (strcmp(keyword_part, reserved_keyword[i].substr(0,strlen(keyword_part)).c_str())){
+                if (first_result == error::not_found){
+                    first_result = i;
+                }
+                else{
+                    return error::ambiguity;
+                }
+            }
+        }
+        for (int i=0; i < len_preprocessing_op_or_punc; ++i){
+            if (strlen(keyword_part) > preprocessing_op_or_punc[i].length())
+                continue;
+            if (strcmp(keyword_part, preprocessing_op_or_punc[i].substr(0,strlen(keyword_part)).c_str())){
+                if (first_result == error::not_found){
+                    first_result = len_reserved_keyword + i;
+                }
+                else{
+                    return error::ambiguity;
+                }
+            }
+        }
+        return first_result;
+    }
+>>>>>>> origin/master
     
     int current_parser = -1;
     
