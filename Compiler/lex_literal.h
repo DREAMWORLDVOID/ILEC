@@ -120,18 +120,52 @@ namespace lexical
     template <func f>
     using orm = _for<1, 0xFFFFFFFF, f>;
     template <size_t t, func f>
-    using times = _for<t, t, f>;
+    using tim = _for<t, t, f>;
     
     using dec = _in<'0', '9'>;
     using oct = _in<'0', '7'>;
     using hex = _or<3, _in<'0', '9'>::w, _in<'a', 'f'>::w, _in<'A', 'F'>::w>;
+    using sign = _or<2, _is<'+'>::w, _is<'-'>::w>;
+    using universal_character_name = seq<3, _is<'\\'>::w,
+    _or<2, seq<2, _is<'u'>::w, tim<4, hex::w>::w>::w,
+    seq<2, _is<'U'>::w, tim<8, hex::w>::w>::w>::w>;
+    
+    namespace preprocessing_token
+    {
+        enum class tokens : size_t
+        {
+            header_name,
+            identifier,
+            pp_number,
+            character_literal,
+            user_defined_character_literal,
+            string_literal,
+            user_defined_string_literal,
+            preprocessing_op_or_punc,
+            others
+        };
+        
+        //header name token
+        using no_new_line = _not<_is<'\n'>::w>;
+        using h_char = _and<2, no_new_line::w, _not<_is<'>'>::w>::w>;
+        using h_char_sequence = orm<h_char::w>;
+        using q_char = _and<2, no_new_line::w, _not<_is<'"'>::w>::w>;
+        using q_char_sequence = orm<q_char::w>;
+        using header_name =
+        _or<2, seq<3, _is<'<'>::w, h_char_sequence::w, _is<'>'>::w>::w,
+        seq<3, _is<'"'>::w, q_char_sequence::w, _is<'"'>::w>::w>;
+        
+        //identifiers
+        using nondigit = _or<3, _in<'a', 'z'>::w, _in<'A', 'Z'>::w, _is<'_'>::w>;
+        using identifier_nondigit = _or<2, nondigit::w, universal_character_name::w>;
+        using identifier =
+        seq<2, identifier_nondigit::w, any<_or<2, identifier_nondigit::w, dec::w>::w>::w>;
+    }
     
     using digit_sequence = orm<dec::w>;
     using fractional_constant =
     _or<2, seq<2, digit_sequence::w, _is<'.'>::w>::w,
-    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;
-    using sign = _or<2, _is<'+'>::w, _is<'-'>::w>;
-    using exponent =
+    seq<3, opt<digit_sequence::w>::w, _is<'.'>::w, digit_sequence::w>::w>;    using exponent =
     seq<3, _or<2, _is<'E'>::w, _is<'e'>::w>::w, opt<sign::w>::w, digit_sequence::w>;
     using floating_suffix =
     _or<4, _is<'f'>::w, _is<'F'>::w,_is<'l'>::w, _is<'L'>::w>;
@@ -147,7 +181,7 @@ namespace lexical
     _or<2, _is<'x'>::w, _is<'X'>::w>::w, any<hex::w>::w>;
     using unsigned_suffix = _or<2, _is<'u'>::w, _is<'U'>::w>;
     using long_suffix = _or<2, _is<'l'>::w, _is<'L'>::w>;
-    using long_long_suffix = times<2, _or<2, _is<'l'>::w, _is<'L'>::w>::w>;
+    using long_long_suffix = tim<2, _or<2, _is<'l'>::w, _is<'L'>::w>::w>;
     using unified_long_suffix =_or<2, long_suffix::w, long_long_suffix::w>;
     using integer_suffix =
     _or<2,seq<2, unsigned_suffix::w, opt<unified_long_suffix::w>::w>::w,
