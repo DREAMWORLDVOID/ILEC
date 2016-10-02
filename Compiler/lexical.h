@@ -11,10 +11,8 @@
 
 using namespace std;
 
-namespace lexical
-{
-    const string reserved_keyword[] =
-    {
+namespace lexical {
+    const string reserved_keyword[] = {
         "alignas",
         "continue",
         "friend",
@@ -89,8 +87,24 @@ namespace lexical
         "public",
         "throw"
     };
-    const int len_reserved_keyword = sizeof(reserved_keyword) /sizeof(reserved_keyword[0]);
-    const string symbol[] = {"1","2"};
+    const int len_reserved_keyword = sizeof(reserved_keyword) / sizeof(reserved_keyword[0]);
+    const string symbol[] = {
+        "1",
+        "2"
+    };
+    const int len_symbol = sizeof(symbol) / sizeof(symbol[0]);
+    
+    int index_keyword(string keyword){
+        for (int i=0; i < len_reserved_keyword; ++i)
+            if (keyword == reserved_keyword[i])
+                return i;
+        
+        for (int i=0; i < len_symbol; ++i)
+            if (keyword == symbol[i])
+                return i + len_reserved_keyword;
+        
+        return -1; // Error: Not Found
+    }
     
     int current_parser = -1;
 }
