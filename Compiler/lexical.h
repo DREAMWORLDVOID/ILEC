@@ -9,6 +9,8 @@
 #ifndef lexical_h
 #define lexical_h
 
+#include "error.h"
+
 using namespace std;
 
 namespace lexical {
@@ -104,7 +106,7 @@ namespace lexical {
     };
     const int len_preprocessing_op_or_punc = sizeof(preprocessing_op_or_punc) / sizeof(preprocessing_op_or_punc[0]);
     
-    int index_keyword(string keyword){
+    int index_keyword(char* keyword){
         for (int i=0; i < len_reserved_keyword; ++i)
             if (keyword == reserved_keyword[i])
                 return i;
@@ -113,11 +115,11 @@ namespace lexical {
             if (keyword == preprocessing_op_or_punc[i])
                 return i + len_reserved_keyword;
         
-        return -1; // Error: Not Found
+        return error::not_found; // Error: Not Found
     }
     
-    int index_keyword_check_ambiguity(string keyword_part){
-        
+    int index_keyword_check_ambiguity(char* keyword_part){
+        return error::not_found;
     }
     
     int current_parser = -1;
