@@ -1,85 +1,8 @@
 #include <iostream>
 using namespace std;
 
-namespace lexical{
-    const string[] reserved_keyword = {
-        "alignas",
-        "continue",
-        "friend",
-        "register",
-        "true",
-        "alignof",
-        "decltype",
-        "goto",
-        "reinterpret_cast",
-        "try",
-        "asm",
-        "default",
-        "if",
-        "return",
-        "typedef",
-        "auto",
-        "delete",
-        "inline",
-        "short",
-        "typeid",
-        "bool",
-        "do",
-        "int",
-        "signed",
-        "typename",
-        "break",
-        "double",
-        "long",
-        "sizeof",
-        "union",
-        "case",
-        "dynamic_cast",
-        "mutable",
-        "static",
-        "unsigned",
-        "catch",
-        "else",
-        "namespace",
-        "static_assert",
-        "using",
-        "char",
-        "enum",
-        "new",
-        "static_cast",
-        "virtual",
-        "char16_t",
-        "explicit",
-        "noexcept",
-        "struct",
-        "void",
-        "char32_t",
-        "export",
-        "nullptr",
-        "switch",
-        "volatile",
-        "class",
-        "extern",
-        "operator",
-        "template",
-        "wchar_t",
-        "const",
-        "false",
-        "private",
-        "this",
-        "while",
-        "constexpr",
-        "float",
-        "protected",
-        "thread_local",
-        "const_cast",
-        "for",
-        "public",
-        "throw"
-    }
-    const len_reserved_keyword = reserved.length();
-    const string[] symbol = {"1","2"};
-}
+#ifndef parser1_h
+#define parser1_h
 
 namespace parser1
 {
@@ -145,10 +68,13 @@ namespace parser1
         lor<3, decimal_literal::w, octal_literal::w, hexadecimal_literal::w>::w,
         opt<integer_suffix::w>::w>;
 }
-
+        
+#endif
+/*
 using namespace parser1;
 template <func f> bool testif(pchar ch) { return invoke<f>(ch); }
 int main()
 {
 	cout << testif<octal_literal::w>("01000000") << endl;
 }
+ */
