@@ -91,7 +91,7 @@ namespace lexical {
         "final" // override and final are not keywords, but reserved in this case for simplificiation
     };
     const int len_reserved_keyword = sizeof(reserved_keyword) / sizeof(reserved_keyword[0]);
-    const string symbol[] = {
+    const string preprocessing_op_or_punc[] = {
         "{","}","[","]","#","##","(",")",
         "<:",":>","<%","%>","%:","%:%:",";",":","...",
         "new","delete","?","::",".",".*",
@@ -102,15 +102,15 @@ namespace lexical {
         "and","and_eq","bitand","bitor","compl","not","not_eq"
         "or","or_eq","xor","xor_eq"
     };
-    const int len_symbol = sizeof(symbol) / sizeof(symbol[0]);
+    const int len_preprocessing_op_or_punc = sizeof(preprocessing_op_or_punc) / sizeof(preprocessing_op_or_punc[0]);
     
     int index_keyword(string keyword){
         for (int i=0; i < len_reserved_keyword; ++i)
             if (keyword == reserved_keyword[i])
                 return i;
         
-        for (int i=0; i < len_symbol; ++i)
-            if (keyword == symbol[i])
+        for (int i=0; i < len_preprocessing_op_or_punc; ++i)
+            if (keyword == preprocessing_op_or_punc[i])
                 return i + len_reserved_keyword;
         
         return -1; // Error: Not Found
