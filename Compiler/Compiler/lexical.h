@@ -9,7 +9,6 @@
 #ifndef lexical_h
 #define lexical_h
 
-#include <iostream>
 using namespace std;
 
 namespace lexical{
@@ -90,6 +89,8 @@ namespace lexical{
     };
     const int len_reserved_keyword = sizeof(reserved_keyword) /sizeof(reserved_keyword[0]);
     const string symbol[] = {"1","2"};
+    
+    int current_parser = -1;
 }
 
 

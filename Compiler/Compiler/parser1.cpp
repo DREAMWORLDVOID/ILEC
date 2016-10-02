@@ -1,8 +1,9 @@
+#ifndef parser1_h
+#define parser1_h
+
 #include <iostream>
 using namespace std;
 
-#ifndef parser1_h
-#define parser1_h
 
 namespace parser1
 {
