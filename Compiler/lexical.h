@@ -163,13 +163,19 @@ namespace lexical {
         while (file[current_pos + i++] == ' ');
         while (file[current_pos + i++] == '\n');
         
-        while (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) == error::ambiguity){
-            if (index_keyword_check_ambiguity(file.substr(current_pos, i+1).c_str()) == error::not_found){
-                next_token = index_keyword(file.substr(current_pos, i).c_str());
-                break;
+        if (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) > -1)
+            next_token = index_keyword(file.substr(current_pos, i).c_str());
+        else{
+            while (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) == error::ambiguity){
+                if (index_keyword_check_ambiguity(file.substr(current_pos, i+1).c_str()) == error::not_found){
+                    next_token = index_keyword(file.substr(current_pos, i).c_str());
+                    break;
+                }
+                ++i;
             }
+            if (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) > -1)
+                next_token = index_keyword(file.substr(current_pos, i).c_str());
         }
-        
         if (is_goto){
             current_pos += i;
             current_token = next_token;
