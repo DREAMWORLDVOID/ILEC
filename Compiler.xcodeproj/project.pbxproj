@@ -25,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		229738DB1DA1271D000465B6 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		229738DC1DA12C00000465B6 /* fileio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileio.h; sourceTree = "<group>"; };
 		22DB03F81DA0E40600D417A9 /* Compiler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Compiler; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DB03FB1DA0E40600D417A9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		22DB04021DA0E43000D417A9 /* lex_literal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lex_literal.h; sourceTree = "<group>"; };
@@ -63,6 +64,7 @@
 			children = (
 				22DB04021DA0E43000D417A9 /* lex_literal.h */,
 				22DB03FB1DA0E40600D417A9 /* main.cpp */,
+				229738DC1DA12C00000465B6 /* fileio.h */,
 				22DB04061DA0E5BB00D417A9 /* lexical.h */,
 				229738DB1DA1271D000465B6 /* error.h */,
 			);

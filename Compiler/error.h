@@ -11,7 +11,8 @@
 
 namespace error {
     const int not_found = -1;
-    const int ambiguity = -2;
+    const int ambiguity = not_found - 1;
+    const int bad_io = ambiguity - 1;
 }
 
 #endif /* error_h */

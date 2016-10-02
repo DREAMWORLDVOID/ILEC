@@ -9,9 +9,10 @@
 #include <iostream>
 #include "lexical.h"
 #include "lex_literal.h"
+#include "fileio.h"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << lexical::len_reserved_keyword << std::endl;
+    std::cout << IO::read("main.cpp") << std::endl;
     return 0;
 }

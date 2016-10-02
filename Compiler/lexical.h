@@ -132,6 +132,18 @@ namespace lexical {
                 }
             }
         }
+        for (int i=0; i < len_preprocessing_op_or_punc; ++i){
+            if (strlen(keyword_part) > preprocessing_op_or_punc[i].length())
+                continue;
+            if (strcmp(keyword_part, preprocessing_op_or_punc[i].substr(0,strlen(keyword_part)).c_str())){
+                if (first_result == error::not_found){
+                    first_result = len_reserved_keyword + i;
+                }
+                else{
+                    return error::ambiguity;
+                }
+            }
+        }
         return first_result;
     }
     
