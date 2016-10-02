@@ -146,7 +146,6 @@ namespace lexical {
         }
         return first_result;
     }
->>>>>>> origin/master
     
     int current_parser = -1;
     
