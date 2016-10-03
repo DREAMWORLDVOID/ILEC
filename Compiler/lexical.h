@@ -118,7 +118,7 @@ namespace lexical {
         return 0; // Error: Not Found
     }
     
-    int index_keyword_check_ambiguity(char* keyword_part){
+    int index_keyword_check_ambiguity(const char* keyword_part){
         int first_result = error::not_found;
         for (int i=0; i < len_reserved_keyword; ++i){
             if (strlen(keyword_part) > reserved_keyword[i].length())
@@ -147,9 +147,43 @@ namespace lexical {
         return first_result;
     }*/
     
-    int current_parser = -1;
+    int current_token = -1;
+    int current_pos = -1;
+    int next_token = -1;
     
+    int get_next_token(const string file, bool is_goto){
+        if ((next_token != -1) && (!is_goto))
+            return next_token;
     
+        int i = 1;
+        while (file[current_pos + i++] == ' ');
+        while (file[current_pos + i++] == '\n');
+        if ((file[current_pos + i] == '/') && (file[current_pos + i+1] == '/')) // comment style
+            while (file[current_pos + i++] != '\n');
+        while (file[current_pos + i++] == ' ');
+        while (file[current_pos + i++] == '\n');
+        
+        if (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) > -1)
+            next_token = index_keyword(file.substr(current_pos, i).c_str());
+        else{
+            while (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) == error::ambiguity){
+                if (index_keyword_check_ambiguity(file.substr(current_pos, i+1).c_str()) == error::not_found){
+                    next_token = index_keyword(file.substr(current_pos, i).c_str());
+                    break;
+                }
+                ++i;
+            }
+            if (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) > -1)
+                next_token = index_keyword(file.substr(current_pos, i).c_str());
+        }
+        if (is_goto){
+            current_pos += i;
+            current_token = next_token;
+            next_token = -1;
+            return current_token;
+        }
+        return next_token;
+    }
 }
 
 
