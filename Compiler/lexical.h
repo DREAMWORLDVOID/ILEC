@@ -164,12 +164,12 @@ namespace lexical {
         while (file[current_pos + i++] == '\n');
         
         if (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) > -1)
-            next_token = index_keyword(file.substr(current_pos, i).c_str());
+            next_token = index_keyword_check_ambiguity(file.substr(current_pos, i).c_str());
         else{
             while (index_keyword_check_ambiguity(file.substr(current_pos, i).c_str()) == error::ambiguity){
                 if (index_keyword_check_ambiguity(file.substr(current_pos, i+1).c_str()) == error::not_found){
                     next_token = index_keyword(file.substr(current_pos, i).c_str());
-                    break;
+                    break; // HAS PROBLEM IF USER DEFINE SOME TOKENS!!!
                 }
                 ++i;
             }
