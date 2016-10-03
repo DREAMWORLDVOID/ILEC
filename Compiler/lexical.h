@@ -106,7 +106,7 @@ namespace lexical {
     };
     const int len_preprocessing_op_or_punc = sizeof(preprocessing_op_or_punc) / sizeof(preprocessing_op_or_punc[0]);
     
-    int index_keyword(char* keyword){
+    /*int index_keyword(char* keyword){
         for (int i=0; i < len_reserved_keyword; ++i)
             if (strcmp(reserved_keyword[i].c_str(),keyword) == 0)
                 return i;
@@ -114,8 +114,8 @@ namespace lexical {
         for (int i=0; i < len_preprocessing_op_or_punc; ++i)
             if (strcmp(preprocessing_op_or_punc[i].c_str(),keyword) == 0)
                 return i + len_reserved_keyword;
-        
-        return error::not_found; // Error: Not Found
+        throw error::runtime_error(error::error_id::not_found);
+        return 0; // Error: Not Found
     }
     
     int index_keyword_check_ambiguity(char* keyword_part){
@@ -145,7 +145,7 @@ namespace lexical {
             }
         }
         return first_result;
-    }
+    }*/
     
     int current_parser = -1;
     

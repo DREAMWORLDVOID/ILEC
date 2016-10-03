@@ -9,10 +9,33 @@
 #ifndef error_h
 #define error_h
 
-namespace error {
-    const int not_found = -1;
-    const int ambiguity = not_found - 1;
-    const int bad_io = ambiguity - 1;
+#include <exception>
+#include <string>
+
+namespace error
+{
+    enum class error_id : size_t
+    {
+        not_found, ambiguity, bad_io
+    };
+    
+    const std::string errors[] =
+    {
+        "not found", "ambiguity", "bad_io"
+    };
+    
+    class runtime_error : std::exception
+    {
+    public:
+        runtime_error(error_id i) noexcept : m_id(i) {}
+        virtual ~runtime_error() noexcept = default;
+        virtual const char* what() const noexcept
+        {
+            return errors[static_cast<size_t>(m_id)].c_str();
+        };
+    private:
+        error_id m_id;
+    };
 }
 
 #endif /* error_h */

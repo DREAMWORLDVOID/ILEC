@@ -9,25 +9,24 @@
 #ifndef fileio_h
 #define fileio_h
 
-#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 
-using namespace std;
-
-namespace IO{
-    string read(string path){
-        ifstream t(path);
-        stringstream buffer;
-        buffer << t.rdbuf();
-        string contents(buffer.str());
-        if (contents.compare("") == 0)
-            return {(char)error::bad_io};
-        for (int i = 0; i < contents.length(); ++i){
-            contents[i] = tolower(contents[i]);
+namespace IO
+{
+    std::string readText(std::string path)
+    {
+        std::ifstream t(path);
+        if (t.good())
+        {
+            std::stringstream buffer;
+            buffer << t.rdbuf();
+            return buffer.str();
         }
-        return contents;
+        else
+            throw error::runtime_error(error::error_id::bad_io);
+        return "";
     }
 }
 

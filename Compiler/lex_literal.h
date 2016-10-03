@@ -141,11 +141,8 @@ namespace lexical
     using hex = _or<3, _in<'0', '9'>::w, _in<'a', 'f'>::w, _in<'A', 'F'>::w>;
     using sign = _or<2, _is<'+'>::w, _is<'-'>::w>;
     using universal_character_name =
-    seq<2, _is<'\\'>::w,
-    _or<2,
-    seq<2, _is<'u'>::w, tim<4, hex::w>::w>::w,
-    seq<2, _is<'U'>::w, tim<8, hex::w>::w>::w>
-    ::w>;
+    seq<2, _is<'\\'>::w,_or<2,seq<2, _is<'u'>::w, tim<4, hex::w>::w>::w,
+    seq<2, _is<'U'>::w, tim<8, hex::w>::w>::w>::w>;
     
     namespace preprocessing_token
     {
