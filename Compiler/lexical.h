@@ -145,7 +145,7 @@ namespace lexical {
             }
         }
         return first_result;
-    }*/
+    }
     
     int current_token = -1;
     int current_pos = -1;
@@ -183,7 +183,7 @@ namespace lexical {
             return current_token;
         }
         return next_token;
-    }
+    }*/
 }
 
 
