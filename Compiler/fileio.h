@@ -15,7 +15,7 @@
 
 namespace IO
 {
-    std::string readText(std::string path)
+    inline std::string readText(std::string path)
     {
         std::ifstream t(path);
         if (t.good())

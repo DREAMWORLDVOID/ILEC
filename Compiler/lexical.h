@@ -10,6 +10,9 @@
 #define lexical_h
 
 #include "error.h"
+#include <string>
+#include <list>
+#include <memory>
 
 using namespace std;
 
@@ -106,6 +109,42 @@ namespace lexical {
     };
     const int len_preprocessing_op_or_punc = sizeof(b_preprocessing_op_or_punc) / sizeof(b_preprocessing_op_or_punc[0]);
     std::string stage1_3(const std::string& i);
+    struct lexical_character final
+    {
+        char set;
+        size_t pos;
+    };
+    namespace preprocessing_token
+    {
+        enum tokens
+        {
+            t_header_name,
+            t_identifier,
+            t_pp_number,
+            t_character_literal,
+            t_user_defined_character_literal,
+            t_string_literal,
+            t_user_defined_string_literal,
+            t_preprocessing_op_or_punc,
+            t_others
+        };
+
+        class token
+        {
+        public:
+            tokens type;
+            size_t pos, length;
+            class physical_file* file;
+        };
+    }
+
+    class physical_file final
+    {
+    public:
+        std::string m_physical_path, m_name;
+        physical_file(std::string physical_path);
+        std::list<std::unique_ptr<preprocessing_token::token>> analyze();
+    };
 }
 
 

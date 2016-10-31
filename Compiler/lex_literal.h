@@ -5,16 +5,17 @@
 #include <algorithm>
 #include <string>
 #include <list>
+#include <memory>
 #include "lexical.h"
 
 namespace lexical
 {
-    using pchar = char*;
+    using pchar = lexical_character*;
     
     template <class f>
     inline pchar invoke(pchar ch)
     {
-        return (*ch != 0) ? f::w(ch) : nullptr;
+        return (ch->set != 0) ? f::w(ch) : nullptr;
     }
     
     template <size_t l, class f, class ...s>
@@ -43,7 +44,7 @@ namespace lexical
     {
         inline static pchar w(pchar ch)
         {
-            return (*ch == c) ? ++ch : nullptr;
+            return (ch->set == c) ? ++ch : nullptr;
         }
     };
     
@@ -52,7 +53,7 @@ namespace lexical
     {
         inline static pchar w(pchar ch)
         {
-            return ((*ch >= a) && (*ch <= b)) ? ++ch : nullptr;
+            return ((ch->set >= a) && (ch->set <= b)) ? ++ch : nullptr;
         }
     };
     
@@ -146,19 +147,6 @@ namespace lexical
     
     namespace preprocessing_token
     {
-        enum tokens
-        {
-            t_header_name,
-            t_identifier,
-            t_pp_number,
-            t_character_literal,
-            t_user_defined_character_literal,
-            t_string_literal,
-            t_user_defined_string_literal,
-            t_preprocessing_op_or_punc,
-            t_others
-        };
-        
         //header name token
         using no_new_line = _not<_is<'\n'> >;
         using h_char = _and<2, no_new_line, _not<_is<'>'> > >;
@@ -208,10 +196,17 @@ namespace lexical
         using d_char = _not<_or<8, _is<'\n'>, _is<'\t'>, _is<'\v'>, _is<'\f'>,
         _is<'('>, _is<')'>, _is<' '>, _is<'\\'> > >;
         using d_char_sequence = orm<d_char>;
+        inline pchar str_comp(char* b1, char* e1, pchar b2)
+        {
+            for (; b1 < e1; ++b1, ++b2)
+                if ((*b1 != b2->set) || (b2->set == 0))
+                    return nullptr;
+            return b2;
+        }
         inline pchar str_comp(pchar b1, pchar e1, pchar b2)       
         {
             for (; b1 < e1; ++b1, ++b2)
-                if ((*b1 != *b2) || (*b2 == 0))
+                if ((b1->set != b2->set) || (b2->set == 0))
                     return nullptr;
             return b2;
         }
@@ -222,8 +217,8 @@ namespace lexical
                 pchar dchar = invoke<opt<d_char_sequence> >(ch);
                 pchar i = invoke<_is<'('> >(dchar);
                 if (i == nullptr) return nullptr;
-                for (; *i != 0; ++i)
-                    if (*i == ')')
+                for (; i->set != 0; ++i)
+                    if (i->set == ')')
                     {
                         pchar e = str_comp(ch, dchar, i + 1);
                         if (e)
@@ -249,44 +244,87 @@ namespace lexical
                 for (auto i = 0; i < len_preprocessing_op_or_punc; ++i)
                 {
                     auto&& base = b_preprocessing_op_or_punc[i];
-                    res = std::max(res, str_comp(const_cast<pchar>(base.data()),
-                        const_cast<pchar>(base.data()) + base.length(), ch));
+                    res = std::max(res, str_comp(const_cast<char*>(base.data()),
+                        const_cast<char*>(base.data()) + base.length(), ch));
                 }
                 return res;
             }
         };
-        struct token
+
+        class tk_header_name : public token
         {
-            tokens type;
-            std::string data;
-        };
-        inline std::list<token> parse(const std::string& i)
-        {
-            auto ret = std::list<token>();
-            pchar iter = const_cast<pchar>(i.data());
-            pchar end = iter + i.length();
-            while (iter < end)
+        public:
+            std::string name;
+            enum class type : size_t
             {
-                pchar arr[] =
-                {
-                    header_name::w(iter),
-                    identifier::w(iter),
-                    pp_number::w(iter),
-                    character_literal::w(iter),
-                    user_defined_character_literal::w(iter),
-                    string_literal::w(iter),
-                    user_defined_string_literal::w(iter),
-                    preprocessing_op_or_punc::w(iter),
-                    iter + 1
-                };
-                auto p = max_element(arr, arr + 9);
-                //remove null characters since they are no longer significant 
-                if (!(((p - arr) == 8) && (*iter != '\n')))
-                    ret.push_back(token{ static_cast<tokens>(p - arr), std::string(iter, *p) });
-                iter = *p;
-            }
-            return ret;
-        }
+                relative, library
+            } t;
+            tk_header_name() = default;
+            tk_header_name(pchar& pos);
+        };
+        
+        class tk_identifier : public token
+        {
+        public:
+            std::string data;
+            tk_identifier() = default;
+            tk_identifier(pchar& pos);
+        };
+
+        class tk_pp_number : public token
+        {
+        public:
+            std::string data;
+            tk_pp_number() = default;
+            tk_pp_number(pchar& pos);
+        };
+            
+        class tk_character_literal : public token
+        {
+        public:
+            uint64_t data;
+            enum class type : size_t
+            {
+
+            } t;
+            tk_character_literal() = default;
+            tk_character_literal(pchar& pos);
+        };
+        
+        class tk_user_defined_character_literal : public token
+        {
+        public:
+            tk_character_literal character;
+            tk_identifier udsuffix;
+            tk_user_defined_character_literal() = default;
+            tk_user_defined_character_literal(pchar& pos);
+        };
+            
+        class tk_string_literal :public token
+        {
+        public:
+            std::unique_ptr<char[]> data;
+            tk_string_literal() = default;
+            tk_string_literal(pchar& pos);
+        };
+            
+        class tk_user_defined_string_literal :public token
+        {
+        public:
+            tk_string_literal string;
+            tk_identifier udsuffix;
+            tk_user_defined_string_literal() = default;
+            tk_user_defined_string_literal(pchar& pos);
+        };
+        
+        class tk_preprocessing_op_or_punc : public token
+        {
+        public:
+            size_t id;
+            tk_preprocessing_op_or_punc() = default;
+            tk_preprocessing_op_or_punc(pchar& pos);
+        };
+               
     }
     
 }

@@ -35,5 +35,8 @@
     <ClCompile Include="lexical.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="lex_literal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

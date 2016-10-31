@@ -1,33 +1,49 @@
 #include "lexical.h"
 #include "lex_literal.h"
-
-std::string lexical::stage1_3(const std::string & i)
+#include "fileio.h"
+namespace lexical
 {
-    using namespace lexical::preprocessing_token;
-    using raw_string_literal = seq<3, opt<encoding_prefix>, _is<'R'>, raw_string>;
-    using comment = _or <2,
-        seq<4, _is < '/'>, _is < '/'>, any<_not<_is<'\n'>>>, _is<'\n'> >,
-        seq<5, _is < '/'>, _is < '*'>, any<_not<seq<2, _is<'*'>, _is<'/'>>>>, 
-        _is<'*'>, _is<'/'>>>;
-    std::string ret;
-    ret.resize(i.length());
-    pchar iter = const_cast<pchar>(i.data());
-    pchar end = iter + i.length();
-    pchar p;
-    while (iter < end)
+    physical_file::physical_file(std::string physical_path):
+        m_physical_path(physical_path)
     {
-        p = raw_string_literal::w(iter);
-        if (p)
-        {
-            iter = p; continue;
-        }
-        auto p = comment::w(iter);
-        if (p)
-        {
-            iter = p; ret.push_back(' '); continue;
-        }
-        ret.push_back(*iter);
-        ++iter;
+        m_name = m_physical_path.substr(
+            std::max(m_physical_path.find_last_of('\\'),
+                m_physical_path.find_last_of('/')) + 1
+        );
     }
-    return ret;
+
+    std::list<std::unique_ptr<preprocessing_token::token>> physical_file::analyze()
+    {
+        auto list = std::list<lexical_character>();
+        auto c = IO::readText(m_physical_path);
+        auto pos = 0u;
+        for (auto ch : c)
+        {
+            list.push_back(lexical_character{ ch, pos }); pos++;
+        }
+        //transformation should be done here
+        //set newlines to LF
+        for (auto iter = list.begin(); iter != list.end();)
+        {
+            auto base = iter; 
+            iter++;
+            if (base->set == '\r' && iter->set == '\n')
+            {
+                list.erase(base);
+                iter++;
+                continue;
+            }
+            if (base->set == '\r')
+            {
+                base->set = '\n';
+                continue;
+            }
+        }
+        for (auto i : list)
+        {
+            std::cout << i.set;
+        }
+        return std::list<std::unique_ptr<preprocessing_token::token>>();
+    }
+
 }
