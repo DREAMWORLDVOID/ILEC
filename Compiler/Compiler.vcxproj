@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{03CAD532-D4A7-4900-8FB9-5778889FD68E}</ProjectGuid>
+    <ProjectGuid>{42A0FB12-7B8F-4450-A5E3-A4BAE942D468}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Compiler</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -142,8 +142,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="parser1.cpp" />
-    <ClCompile Include="regexanal.cpp" />
+    <ClInclude Include="error.h" />
+    <ClInclude Include="fileio.h" />
+    <ClInclude Include="lexical.h" />
+    <ClInclude Include="lex_literal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lexical.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

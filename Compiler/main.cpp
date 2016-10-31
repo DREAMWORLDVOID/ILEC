@@ -12,10 +12,11 @@
 #include "fileio.h"
 
 int main(int argc, const char * argv[]) {
-    std::cout << lexical::len_reserved_keyword << std::endl;
-    std::cout << IO::readText("main.cpp") << std::endl;
-    std::string line;
-    getline(std::cin, line);
-    std::cout << lexical::preprocessing_token::identifier::w(const_cast<char*>(line.data())) - line.data() << std::endl;
+    auto res = lexical::preprocessing_token::parse(lexical::stage1_3(IO::readText("main.cpp")));
+    for (auto && x : res)
+    {
+        std::cout << x.data << std::endl;
+    }
+    system("pause");
     return 0;
 }

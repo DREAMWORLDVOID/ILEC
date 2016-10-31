@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
+#include <list>
+#include "lexical.h"
 
 namespace lexical
 {
@@ -205,7 +208,7 @@ namespace lexical
         using d_char = _not<_or<8, _is<'\n'>, _is<'\t'>, _is<'\v'>, _is<'\f'>,
         _is<'('>, _is<')'>, _is<' '>, _is<'\\'> > >;
         using d_char_sequence = orm<d_char>;
-        pchar str_comp(pchar b1, pchar e1, pchar b2)       
+        inline pchar str_comp(pchar b1, pchar e1, pchar b2)       
         {
             for (; b1 < e1; ++b1, ++b2)
                 if ((*b1 != *b2) || (*b2 == 0))
@@ -238,6 +241,52 @@ namespace lexical
         
         //ud string
         using user_defined_string_literal = seq<2, string_literal, identifier>;
+        struct preprocessing_op_or_punc
+        {
+            static inline pchar w(pchar ch)
+            {
+                pchar res = nullptr;
+                for (auto i = 0; i < len_preprocessing_op_or_punc; ++i)
+                {
+                    auto&& base = b_preprocessing_op_or_punc[i];
+                    res = std::max(res, str_comp(const_cast<pchar>(base.data()),
+                        const_cast<pchar>(base.data()) + base.length(), ch));
+                }
+                return res;
+            }
+        };
+        struct token
+        {
+            tokens type;
+            std::string data;
+        };
+        inline std::list<token> parse(const std::string& i)
+        {
+            auto ret = std::list<token>();
+            pchar iter = const_cast<pchar>(i.data());
+            pchar end = iter + i.length();
+            while (iter < end)
+            {
+                pchar arr[] =
+                {
+                    header_name::w(iter),
+                    identifier::w(iter),
+                    pp_number::w(iter),
+                    character_literal::w(iter),
+                    user_defined_character_literal::w(iter),
+                    string_literal::w(iter),
+                    user_defined_string_literal::w(iter),
+                    preprocessing_op_or_punc::w(iter),
+                    iter + 1
+                };
+                auto p = max_element(arr, arr + 9);
+                //remove null characters since they are no longer significant 
+                if (!(((p - arr) == 8) && (*iter != '\n')))
+                    ret.push_back(token{ static_cast<tokens>(p - arr), std::string(iter, *p) });
+                iter = *p;
+            }
+            return ret;
+        }
     }
     
 }
