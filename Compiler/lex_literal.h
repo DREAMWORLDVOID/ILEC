@@ -255,10 +255,6 @@ namespace lexical
         {
         public:
             std::string name;
-            enum class type : size_t
-            {
-                relative, library
-            } t;
             tk_header_name() = default;
             tk_header_name(pchar& pos);
         };
@@ -282,11 +278,7 @@ namespace lexical
         class tk_character_literal : public token
         {
         public:
-            uint64_t data;
-            enum class type : size_t
-            {
-
-            } t;
+            std::string data;
             tk_character_literal() = default;
             tk_character_literal(pchar& pos);
         };
@@ -303,7 +295,7 @@ namespace lexical
         class tk_string_literal :public token
         {
         public:
-            std::unique_ptr<char[]> data;
+            std::string data;
             tk_string_literal() = default;
             tk_string_literal(pchar& pos);
         };
@@ -320,9 +312,17 @@ namespace lexical
         class tk_preprocessing_op_or_punc : public token
         {
         public:
-            size_t id;
+            std::string data;
             tk_preprocessing_op_or_punc() = default;
             tk_preprocessing_op_or_punc(pchar& pos);
+        };
+
+        class tk_others : public token
+        {
+        public:
+            char data;
+            tk_others() = default;
+            tk_others(pchar& pos);
         };
                
     }

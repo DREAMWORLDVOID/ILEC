@@ -16,12 +16,13 @@ namespace error
 {
     enum class error_id : size_t
     {
-        not_found, ambiguity, bad_io
+        not_found, ambiguity, bad_io,
+        L1001
     };
     
     const std::string errors[] =
     {
-        "not found", "ambiguity", "bad_io"
+        "not found", "ambiguity", "bad_io", "L1001"
     };
     
     class runtime_error : std::exception

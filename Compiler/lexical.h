@@ -93,7 +93,7 @@ namespace lexical {
         "public",
         "throw",
         "override",
-        "final" // override and final are not keywords, but reserved in this case for simplificiation
+        "final" 
     };
     const int len_reserved_keyword = sizeof(reserved_keyword) / sizeof(reserved_keyword[0]);
     const string b_preprocessing_op_or_punc[] = {
@@ -108,7 +108,7 @@ namespace lexical {
         "or","or_eq","xor","xor_eq"
     };
     const int len_preprocessing_op_or_punc = sizeof(b_preprocessing_op_or_punc) / sizeof(b_preprocessing_op_or_punc[0]);
-    std::string stage1_3(const std::string& i);
+
     struct lexical_character final
     {
         char set;
